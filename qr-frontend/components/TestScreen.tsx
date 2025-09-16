@@ -11,7 +11,7 @@ type User = {
   createdAt: string;
 };
 
-export const TestScreen = () => {
+const TestScreen = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -55,3 +55,6 @@ const styles = StyleSheet.create({
   name: { fontWeight: 'bold', fontSize: 16 },
   error: { color: 'red' },
 });
+
+// This is the required default export
+export default TestScreen;

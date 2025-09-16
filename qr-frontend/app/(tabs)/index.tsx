@@ -1,11 +1,12 @@
-import { TestScreen } from "../components/TestScreen";
-import {Text} from "react-native";
+// app/index.tsx
+import React from "react";
+import { SafeAreaView } from "react-native";
+import LoginScreen from "../components/LoginScreen";
 
-export default function HomeScreen() {
+export default function Index() {
   return (
-    <>
-      <Text style={{color:"white"}}>Home Screen</Text>
-      <TestScreen />
-    </>
+    <SafeAreaView style={{ flex: 1 }}>
+      <LoginScreen />
+    </SafeAreaView>
   );
 }
