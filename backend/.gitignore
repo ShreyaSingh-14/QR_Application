@@ -7,5 +7,4 @@ node_modules/
 # Compiled TypeScript
 dist/
 
-# Optional system files
-.DS_Store
+
