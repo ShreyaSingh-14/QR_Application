@@ -17,8 +17,8 @@ const ExploreScreen = () => {
           text: 'Yes',
           onPress: async () => {
             try {
-              await AsyncStorage.clear(); // clear session
-              router.replace('/auth/sign-in'); // redirect to login
+              await AsyncStorage.clear();
+              router.replace('/auth/sign-in'); 
             } catch (error) {
               console.error('Error logging out:', error);
             }
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     marginBottom: 30,
-    color: '#0D3B66', // dark teal-blue
+    color: '#0D3B66', 
     textAlign: 'center',
   },
   card: {
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   logoutBtn: {
-    backgroundColor: '#008080', // teal (matches login button)
+    backgroundColor: '#008080', 
     paddingVertical: 16,
     borderRadius: 25,
     alignItems: 'center',

@@ -1,24 +1,22 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator, ToastAndroid } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../config/FirebaseConfig';
-import { ToastAndroid } from 'react-native';
-import * as WebBrowser from 'expo-web-browser';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function SignIn() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>(); 
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
-  }, []);
+  }, [navigation]);
 
   const OnSignIn = () => {
     if (!email || !password) {
@@ -28,7 +26,7 @@ export default function SignIn() {
     setIsLoading(true);
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!(emailPattern.test(email.trim()))) {
+    if (!emailPattern.test(email.trim())) {
       ToastAndroid.show('Please enter a valid email address.', ToastAndroid.LONG);
       setIsLoading(false);
       return;
@@ -40,7 +38,7 @@ export default function SignIn() {
         router.replace('/(tabs)/home');
         console.log('User signed in:', user);
       })
-      .catch((error) => {
+      .catch((error: any) => {  
         let message = '';
         switch (error.code) {
           case 'auth/invalid-email':
@@ -75,6 +73,7 @@ export default function SignIn() {
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
+          value={email}
         />
       </View>
 
@@ -86,6 +85,7 @@ export default function SignIn() {
           placeholderTextColor="#999"
           secureTextEntry={!showPassword}
           onChangeText={setPassword}
+          value={password}
         />
         <TouchableOpacity
           onPress={() => setShowPassword(!showPassword)}

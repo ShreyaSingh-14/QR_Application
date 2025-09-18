@@ -51,7 +51,7 @@ export default function SignUp() {
     }
 
     try {
-      // ✅ Create user in Firebase Auth
+      
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email.trim(),
@@ -59,7 +59,7 @@ export default function SignUp() {
       );
       const user = userCredential.user;
 
-      // ✅ Create Firestore doc immediately
+      
       await setDoc(doc(db, "users", user.uid), {
         fullName: fullName.trim(),
         email: user.email,
@@ -67,8 +67,7 @@ export default function SignUp() {
         createdAt: new Date(),
       });
 
-      // ✅ Redirect to onboarding right away
-      router.replace("/onboarding/one-time-form");
+      router.replace("/(tabs)/one-time-form");
     } catch (error: any) {
       let message = "";
       switch (error.code) {
