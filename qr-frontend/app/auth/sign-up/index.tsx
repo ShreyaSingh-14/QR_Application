@@ -11,9 +11,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigation, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../../../config/FirebaseConfig"; 
+import { auth, db } from "../../../config/FirebaseConfig";
 import { LinearGradient } from "expo-linear-gradient";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function SignUp() {
   const navigation = useNavigation();
@@ -27,7 +27,7 @@ export default function SignUp() {
 
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
-  }, []);
+  }, [navigation]);
 
   const OnCreateAccount = async () => {
     if (!email || !password || !fullName) {
@@ -51,6 +51,7 @@ export default function SignUp() {
     }
 
     try {
+      // ✅ Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email.trim(),
@@ -58,18 +59,17 @@ export default function SignUp() {
       );
       const user = userCredential.user;
 
-      
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
+      // ✅ Create Firestore doc immediately
+      await setDoc(doc(db, "users", user.uid), {
+        fullName: fullName.trim(),
+        email: user.email,
+        onboardingComplete: false,
+        createdAt: new Date(),
+      });
 
-      if (docSnap.exists()) {
-        
-        router.replace("/(tabs)/home");
-      } else {
-      
-        router.replace("/onboarding/business-form");
-      }
-    } catch (error) {
+      // ✅ Redirect to onboarding right away
+      router.replace("/onboarding/one-time-form");
+    } catch (error: any) {
       let message = "";
       switch (error.code) {
         case "auth/email-already-in-use":
@@ -92,11 +92,9 @@ export default function SignUp() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <Text style={styles.title}>Register</Text>
       <Text style={styles.subtitle}>Create an account to get started</Text>
 
-      {/* Full Name */}
       <View style={styles.inputWrapper}>
         <TextInput
           style={styles.input}
@@ -106,7 +104,6 @@ export default function SignUp() {
         />
       </View>
 
-      {/* Email */}
       <View style={styles.inputWrapper}>
         <TextInput
           style={styles.input}
@@ -118,7 +115,6 @@ export default function SignUp() {
         />
       </View>
 
-      {/* Password */}
       <View style={styles.inputWrapper}>
         <TextInput
           style={styles.input}
@@ -139,13 +135,15 @@ export default function SignUp() {
         </TouchableOpacity>
       </View>
 
-      {/* Sign Up Button */}
       <TouchableOpacity
         onPress={OnCreateAccount}
         disabled={isLoading}
         style={styles.signUpWrapper}
       >
-        <LinearGradient colors={["#008080", "#0D98BA"]} style={styles.signUpButton}>
+        <LinearGradient
+          colors={["#008080", "#0D98BA"]}
+          style={styles.signUpButton}
+        >
           {isLoading ? (
             <ActivityIndicator color="#fff" />
           ) : (
@@ -154,7 +152,6 @@ export default function SignUp() {
         </LinearGradient>
       </TouchableOpacity>
 
-      {/* Already have account */}
       <TouchableOpacity
         onPress={() => router.replace("/auth/sign-in")}
         style={styles.loginWrapper}
@@ -164,7 +161,6 @@ export default function SignUp() {
         </Text>
       </TouchableOpacity>
 
-      {/* Footer */}
       <Text style={styles.footerNote}>
         By signing up, you agree to our{" "}
         <Text style={styles.link}>terms of service</Text> and{" "}
@@ -175,23 +171,9 @@ export default function SignUp() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    padding: 25,
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: "700",
-    color: "#0D3B66",
-    marginBottom: 5,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: "#777",
-    marginBottom: 25,
-  },
+  container: { flex: 1, backgroundColor: "#fff", padding: 25, justifyContent: "center" },
+  title: { fontSize: 26, fontWeight: "700", color: "#0D3B66", marginBottom: 5 },
+  subtitle: { fontSize: 14, color: "#777", marginBottom: 25 },
   inputWrapper: {
     backgroundColor: "#fff",
     borderWidth: 1,
@@ -202,48 +184,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  input: {
-    flex: 1,
-    fontSize: 15,
-    paddingVertical: 12,
-    color: "#333",
-  },
-  eyeIcon: {
-    padding: 5,
-  },
-  signUpWrapper: {
-    borderRadius: 25,
-    overflow: "hidden",
-  },
-  signUpButton: {
-    paddingVertical: 15,
-    borderRadius: 25,
-    alignItems: "center",
-  },
-  signUpText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#fff",
-  },
-  loginWrapper: {
-    alignItems: "center",
-    marginVertical: 20,
-  },
-  loginText: {
-    fontSize: 14,
-    color: "#777",
-  },
-  loginLink: {
-    color: "#008080",
-    fontWeight: "600",
-  },
-  footerNote: {
-    fontSize: 12,
-    color: "#aaa",
-    textAlign: "center",
-    marginTop: 10,
-  },
-  link: {
-    color: "#008080",
-  },
+  input: { flex: 1, fontSize: 15, paddingVertical: 12, color: "#333" },
+  eyeIcon: { padding: 5 },
+  signUpWrapper: { borderRadius: 25, overflow: "hidden" },
+  signUpButton: { paddingVertical: 15, borderRadius: 25, alignItems: "center" },
+  signUpText: { fontSize: 16, fontWeight: "600", color: "#fff" },
+  loginWrapper: { alignItems: "center", marginVertical: 20 },
+  loginText: { fontSize: 14, color: "#777" },
+  loginLink: { color: "#008080", fontWeight: "600" },
+  footerNote: { fontSize: 12, color: "#aaa", textAlign: "center", marginTop: 10 },
+  link: { color: "#008080" },
 });
