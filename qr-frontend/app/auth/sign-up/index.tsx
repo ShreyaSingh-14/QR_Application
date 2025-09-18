@@ -35,7 +35,7 @@ export default function SignUp() {
       return;
     }
 
-    setIsLoading(true);
+    // setIsLoading(true);
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email.trim())) {
@@ -66,8 +66,6 @@ export default function SignUp() {
         onboardingComplete: false,
         createdAt: new Date(),
       });
-
-      router.replace("/(tabs)/one-time-form");
     } catch (error: any) {
       let message = "";
       switch (error.code) {
@@ -86,6 +84,7 @@ export default function SignUp() {
       ToastAndroid.show(message, ToastAndroid.LONG);
     } finally {
       setIsLoading(false);
+      router.replace("/enterDetails");
     }
   };
 
