@@ -90,22 +90,19 @@ const EnterDetailsScreen: React.FC = () => {
         businessType,
         businessAddress,
         businessDescription,
-        qrLink: qrLink || `https://scantowall.com/business/${uniqueId}`, // Default QR link if not provided
+        qrLink: qrLink || `https://scantowall.com/business/${uniqueId}`, 
       };
       
       console.log('Form submitted:', formData);
       
-      // Here you could save to your backend/database
-      // await saveBusinessData(formData);
       
-      // Navigate to QR screen with the form data
       const queryParams = new URLSearchParams({
         link: formData.qrLink,
         userId: uniqueId,
         businessName: businessName,
       }).toString();
       
-    //   router.push(`/qr?${queryParams}`);
+     router.replace('/(tabs)/home');
       
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -116,7 +113,7 @@ const EnterDetailsScreen: React.FC = () => {
   };
 
   const handleBack = () => {
-    router.back();
+    router.replace("/auth/sign-in");
   };
 
   const getCharacterCount = (text: string, limit: number) => {

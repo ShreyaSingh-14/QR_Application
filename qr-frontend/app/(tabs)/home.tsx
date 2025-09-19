@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import { View, Text, TouchableOpacity, Alert, StyleSheet } from "react-native";
 import QRCode from "react-native-qrcode-svg";
-import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import * as Print from "expo-print";
 
@@ -107,10 +106,10 @@ export default function Index() {
 
       <View style={styles.buttonRow}>
         <TouchableOpacity style={styles.btn} onPress={() => saveQr("download")}>
-          <Text style={styles.btnText}>Download and share PDF</Text>
+          <Text style={styles.btnText}>Share as pdf</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btn} onPress={() => saveQr("print")}>
-          <Text style={styles.btnText}>Print</Text>
+          <Text style={styles.btnText}>Download and Print</Text>
         </TouchableOpacity>
       </View>
 
