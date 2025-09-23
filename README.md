@@ -64,7 +64,6 @@ router.push(`/qr?link=${companyLink}&userId=${userId}`);
 
   * `saveQRCode`: Saves QR code to device gallery.
   * `uploadQRCode`: Uploads QR code to Cloudinary.
-  * `requestPermission`: Requests media library permission if denied.
 
 ## Dependencies
 
@@ -73,9 +72,10 @@ router.push(`/qr?link=${companyLink}&userId=${userId}`);
 * [expo-media-library](https://docs.expo.dev/versions/latest/sdk/media-library/)
 * [expo-router](https://expo.github.io/router/docs)
 
-## Notes
+
 
 * Make sure the device/emulator has **media library permissions**.
 * Cloudinary upload requires a valid **cloud name** and **upload preset**.
 * This component works best on **Expo-managed React Native projects**.
+
 
